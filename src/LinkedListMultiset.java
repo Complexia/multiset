@@ -18,7 +18,7 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	
 	public void add(T item) {
 		if(head == null) {
-			head = new LinkedNode(item, null,size);
+			head = new LinkedNode(item, null,size, null);
 			currentNode = head;
 			size++;
 			
@@ -39,7 +39,8 @@ public class LinkedListMultiset<T> extends Multiset<T>
 				currentNode = currentNode.getParentNode();
 			}
 			if(check == 0) {
-				currentNode = new LinkedNode(item,head,size);
+				currentNode = new LinkedNode(item,head,size, null);
+				currentNode.getParentNode().setChildNode(currentNode);
 				head = currentNode;
 				size++;
 			}
@@ -65,23 +66,54 @@ public class LinkedListMultiset<T> extends Multiset<T>
 			
 		}
 		
-		// default return, please override when you implement this method
+		
 		return count;
 	} // end of add()
 	
 	
 	public void removeOne(T item) {
-		// Implement me!
+		for(int i=size;i>0;i--) {
+			if(currentNode.getElement().equals(item)) {
+				
+				if(currentNode.getECounter() == 1) {
+					currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+					currentNode = head;
+					size--;
+					break;
+				}
+				else {
+					currentNode.dementCounter();
+					currentNode = head;
+					break;
+				}
+				
+			}
+			currentNode = currentNode.getParentNode();
+		}
 	} // end of removeOne()
 	
 	
 	public void removeAll(T item) {
-		// Implement me!
+		for(int i=size;i>0;i--) {
+			if(currentNode.getElement().equals(item)) {
+				currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+				currentNode = head;
+				size--;
+				break;
+			}
+			currentNode = currentNode.getParentNode();
+		}
 	} // end of removeAll()
 	
 	
 	public void print(PrintStream out) {
-		// Implement me!
+		
+		for(int i=size;i>0;i--) {
+			out.println(currentNode.getElement() + " | " + currentNode.getECounter());
+			currentNode = currentNode.getParentNode();
+			
+		}
+		currentNode = head;
 	} // end of print()
 	
 	
@@ -90,10 +122,12 @@ public class LinkedListMultiset<T> extends Multiset<T>
 		int eCounter = 1;
 		int index;
 		LinkedNode parentNode;
-		public LinkedNode(T element, LinkedNode parentNode, int index){
+		LinkedNode childNode;
+		public LinkedNode(T element, LinkedNode parentNode, int index, LinkedNode childNode){
 			this.element = element;
 			this.parentNode = parentNode;
 			this.index = index;
+			this.childNode = childNode;
 		}
 		
 		public T getElement() {
@@ -111,6 +145,18 @@ public class LinkedListMultiset<T> extends Multiset<T>
 		}
 		public void aumentCounter() {
 			eCounter++;
+		}
+		public void setChildNode(LinkedNode childNode) {
+			this.childNode = childNode;
+		}
+		public LinkedNode getChildNode() {
+			return childNode;
+		}
+		public void setParentNode(LinkedNode parentNode) {
+			this.parentNode = parentNode;
+		}
+		public void dementCounter() {
+			eCounter--;
 		}
 	}
 } // end of class LinkedListMultiset
