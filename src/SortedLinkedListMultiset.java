@@ -88,6 +88,7 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 							check1 = 1;
 						}
 					
+					
 				}
 				else {
 					if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0) {
@@ -116,31 +117,148 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 
 			
 		}
-		
+		System.out.println("size: " + size);
+
 	} // end of add()
 	
 	
 	public int search(T item) {
-		// Implement me!		
 		
-		// default return, please override when you implement this method
-		return 0;
+		int count = 0;
+		currentNode = head;
+		for(int i=0;i<size;i++) {
+			
+			if(currentNode.getElement().equals(item)) {
+				
+				count = currentNode.getECounter();
+				currentNode = head;
+				break;
+			}
+			currentNode = currentNode.getChildNode();
+			
+		}
+		
+		
+		return count;
+		
+		
+		
 	} // end of add()
 	
 	
 	public void removeOne(T item) {
-		// Implement me!
+		
+		currentNode = head;
+		for(int i=0;i<size;i++) {
+			if(currentNode.getElement().equals(item)) {
+				
+				if(currentNode.getECounter() == 1) {
+					if(currentNode.getChildNode()!=null) {
+						
+						currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+						
+						if(currentNode.getParentNode() != null) {
+							currentNode.getParentNode().setChildNode(currentNode.getChildNode());
+						}
+						else {
+							
+							currentNode.getChildNode().setParentNode(null);
+							head = currentNode.getChildNode();
+							
+							
+						}
+						
+						
+						
+						
+					}
+					else {
+						if(currentNode.getParentNode() != null) {
+							currentNode.getParentNode().setChildNode(null);
+						}
+						else {
+							head = null;
+						}
+						
+						
+					}
+					
+					currentNode = head;
+					size--;
+					break;
+				}
+				else {
+					
+					currentNode.dementCounter();
+					currentNode = head;
+					break;
+				}
+				
+			}
+			currentNode = currentNode.getChildNode();
+		}
+		
+		
 	} // end of removeOne()
 	
 	
 	public void removeAll(T item) {
-		// Implement me!
+		currentNode = head;
+		for(int i=0;i<size;i++) {
+			
+			if(currentNode.getElement().equals(item)) {
+				if(currentNode.getChildNode()!=null) {
+					
+					currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+					
+					if(currentNode.getParentNode() != null) {
+						currentNode.getParentNode().setChildNode(currentNode.getChildNode());
+					}
+					else {
+						
+						currentNode.getChildNode().setParentNode(null);
+						head = currentNode.getChildNode();
+						
+						
+					}
+					
+					
+					
+					
+				}
+				else {
+					if(currentNode.getParentNode() != null) {
+						currentNode.getParentNode().setChildNode(null);
+					}
+					else {
+						head = null;
+					}
+					
+					
+				}
+				
+				currentNode = head;
+				size--;
+				break;
+			}
+			
+			currentNode = currentNode.getChildNode();
+		}
 	} // end of removeAll()
 	
 	
 	public void print(PrintStream out) {
-		// Implement me!
+		currentNode = head;
+		for(int i=0;i<size;i++) {
+			out.println(currentNode.getElement() + " | " + currentNode.getECounter());
+			currentNode = currentNode.getChildNode();
+			
+		}
+		currentNode = head;
+		
 	} // end of print()
+	
+	
 	
 	
 	private class LinkedNode{

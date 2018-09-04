@@ -76,7 +76,13 @@ public class LinkedListMultiset<T> extends Multiset<T>
 			if(currentNode.getElement().equals(item)) {
 				
 				if(currentNode.getECounter() == 1) {
-					currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+					if(currentNode.getChildNode()!=null) {
+						currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+					}
+					else {
+						currentNode.getParentNode().setChildNode(null);
+					}
+					
 					currentNode = head;
 					size--;
 					break;
