@@ -3,8 +3,9 @@ import java.io.PrintStream;
 public class LocalTest {
 	
 	public static void main(String[]args) {
-	    SortedLinkedListMultiset l = new SortedLinkedListMultiset();
+	    //SortedLinkedListMultiset l = new SortedLinkedListMultiset();
 		//LinkedListMultiset l = new LinkedListMultiset();
+	    BstMultiset l = new BstMultiset();
 		final PrintStream outStream = System.out;
 		
 		String A = "hello";
@@ -12,6 +13,10 @@ public class LocalTest {
 		String C = "Mes";
 		String D = "dd";
 		String E = "aa";
+		String F = "ee";
+		String G = "jj";
+		String H = "zz";
+		String I = "oo";
 		
 		
 		
@@ -22,29 +27,14 @@ public class LocalTest {
 		l.add(E);
 		l.add(A);
 		l.add(A);
+		l.add(F);
+		l.add(G);
+		l.add(H);
+		l.add(I);
 		
-		
-		
-//		System.out.println(l.search(B));
-//		System.out.println(l.search(A));
-		
-		
+		l.removeAll(I);
+		System.out.println(l.search(E));
 		l.print(outStream);
-		
-		System.out.println(l.search(A));
-		l.removeOne(E);
-		
-		
-		
-//		l.removeOne(A);
-//		l.removeOne(A);
-//		
-		l.removeOne(A);
-		
-		l.print(outStream);
-		
-		System.out.println(l.search(A));
-		
 		System.out.println("Success");
 	}
 }
