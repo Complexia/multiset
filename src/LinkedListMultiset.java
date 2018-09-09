@@ -77,10 +77,24 @@ public class LinkedListMultiset<T> extends Multiset<T>
 				
 				if(currentNode.getECounter() == 1) {
 					if(currentNode.getChildNode()!=null) {
-						currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+						if(currentNode.getParentNode() != null) {
+							currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+						}
+						else {
+							currentNode.getChildNode().setParentNode(null);
+							
+						}
+						
 					}
 					else {
-						currentNode.getParentNode().setChildNode(null);
+						if(currentNode.getParentNode() != null) {
+							currentNode.getParentNode().setChildNode(null);
+							head = currentNode.getParentNode();
+						}
+						else {
+							head = null;
+						}
+						
 					}
 					
 					currentNode = head;
@@ -102,8 +116,36 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	public void removeAll(T item) {
 		for(int i=size;i>0;i--) {
 			if(currentNode.getElement().equals(item)) {
-				currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+				
+				if(currentNode.getChildNode() != null) {
+					
+					if(currentNode.getParentNode() != null) {
+						currentNode.getChildNode().setParentNode(currentNode.getParentNode());
+						currentNode.getParentNode().setChildNode(currentNode.getChildNode());
+					}
+					else {
+						currentNode.getChildNode().setParentNode(null);
+						
+					}
+					
+				}
+				else {
+					if(currentNode.getParentNode() != null) {
+						
+						
+						currentNode.getParentNode().setChildNode(null);
+						head = currentNode.getParentNode();
+						
+					}
+					else {
+						head = null;
+					}
+					
+					
+				}
+				
 				currentNode = head;
+				
 				size--;
 				break;
 			}
@@ -113,6 +155,8 @@ public class LinkedListMultiset<T> extends Multiset<T>
 	
 	
 	public void print(PrintStream out) {
+		currentNode = head;
+		
 		
 		for(int i=size;i>0;i--) {
 			out.println(currentNode.getElement() + " | " + currentNode.getECounter());

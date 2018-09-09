@@ -15,102 +15,227 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 	
 	public void add(T item) {
 		
+		
 		if(head == null) {
 			head = new LinkedNode(item, null,size, null);
 			currentNode = head;
 			size++;
 			
 			
+			
 		}
 		else {
 			
-			int check1 = 0;
+			
+			
+			int check = 0;
 			boolean inserted = false;
 			int point = size/2;
-			
+			currentNode = head;
+			LinkedNode tempNode = new LinkedNode(item, null, 3, null);
 			while(!inserted) {
 				
-				if(size>1) {
-						if(point < 1) {
-							point  = 1;
-						}
-						for(int i=0;i<point;i++) {
+				if(point == 0 && (currentNode.getChildNode() == null || currentNode.getParentNode() == null)) {
+					if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) == 0) {
+						currentNode.aumentCounter();
+						
+						inserted = true;
+						break;
+					}
+					try {
+						if(currentNode.getChildNode().getElement().toString().compareToIgnoreCase(item.toString()) == 0) {
 							
-							if(check1 == 0) {
-								if(currentNode.getChildNode()==null) {
-									LinkedNode tempNode = new LinkedNode(item,currentNode,3,null);
-									currentNode.setChildNode(tempNode);
-									size++;
-									inserted = true;
-									break;
-								}
-								currentNode = currentNode.getChildNode();
-							}
-							else {
-								
-								if(currentNode.getParentNode()==null) {
-									LinkedNode tempNode = new LinkedNode(item,null,3,currentNode);
-									currentNode.setParentNode(tempNode);
-									head = tempNode;
-									size++;
-									inserted = true;
-									break;
-								}
-								currentNode = currentNode.getParentNode();
-							}
-							
-						}
-						if((currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0)&&(currentNode.getChildNode().getElement().toString().compareToIgnoreCase(item.toString()) < 0)) {
-							
-							point = point/2;
-							check1 = 0;
-							
-						}
-						else if((currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0)&&((currentNode.getChildNode().getElement().toString().compareToIgnoreCase(item.toString()) > 0)||(currentNode.getChildNode()==null))) {
-							
-							LinkedNode tempNode = new LinkedNode(item, currentNode, 3, currentNode.getChildNode());
-							currentNode.getChildNode().setParentNode(tempNode);
-							currentNode.setChildNode(tempNode);
-							currentNode = head;
-							inserted = true;
-							size++;
-							break;
-						}
-						else if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) == 0) {
-							
-							currentNode.aumentCounter();
+							currentNode.getChildNode().aumentCounter();
 							inserted = true;
 							break;
 						}
-						else {
-							
-							point = point/2;
-							check1 = 1;
-						}
+					}
+					catch(Exception e) {
+						
+					}
 					
-					
+					if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0) { //item greater than CE
+						
+						
+						
+						tempNode.setParentNode(currentNode);
+						tempNode.setChildNode(currentNode.getChildNode());
+						currentNode.setChildNode(tempNode);
+						size++;
+						inserted = true;
+						break;
+					}
+					if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) > 0) { //item smaller than CE
+						tempNode.setChildNode(head);
+						head.setParentNode(tempNode);
+						
+						head = tempNode;
+						
+						size++;
+						inserted = true;
+						break;
+					}
 				}
 				else {
-					if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0) {
-						
-						LinkedNode tempNode = new LinkedNode(item,currentNode,3,null);
-						currentNode.setChildNode(tempNode);
-						inserted = true;
-						size++;
-						currentNode = head;
-						break;
+					point = 1;
+					if(check == 0) {
+						for(int i=0;i<point;i++) {
+							currentNode = currentNode.getChildNode();
+						}
 					}
 					
-					else {
+					else if(check == 1) {
+						for(int i=0;i<point;i++) {
+							currentNode = currentNode.getParentNode();
+						}
+					}
+					
+					
+					
+					
+					
+					if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0) { //item greater than CE
 						
-						LinkedNode tempNode = new LinkedNode(item,null,3,currentNode);
-						currentNode.setParentNode(tempNode);
+						
+						if(currentNode.getChildNode() == null || 
+								currentNode.getChildNode().getElement().toString().compareToIgnoreCase(item.toString()) > 0) { //item smaller than child of CE
+							
+							if(currentNode.getChildNode() != null) {
+								tempNode.setChildNode(currentNode.getChildNode());
+								currentNode.getChildNode().setParentNode(tempNode);
+							}
+							
+							tempNode.setParentNode(currentNode);														
+							currentNode.setChildNode(tempNode);
+							
+							size++;
+							inserted = true;
+							break;
+							
+							
+						}
+						
+						check = 0;
+					}
+					else if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) > 0) { //item smaller than CE
+						
+						
+						if(currentNode.getParentNode() == null || 
+								currentNode.getParentNode().getElement().toString().compareToIgnoreCase(item.toString()) < 0) { //item greater than parent of CE
+							
+							if(currentNode.getParentNode() != null) {
+								tempNode.setParentNode(currentNode.getParentNode());
+								currentNode.getParentNode().setChildNode(tempNode);
+							}
+							
+							
+							tempNode.setChildNode(currentNode);
+							
+							currentNode.setParentNode(tempNode);
+							
+							if(tempNode.getParentNode() == null) {
+								head = tempNode;
+							}
+							size++;
+							inserted = true;
+							break;
+							
+							
+						}
+						check = 1;
+					}
+					else if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) == 0) { //item equals than CE
+						currentNode.aumentCounter();
+						
+						
 						inserted = true;
-						size++;
-						currentNode = head;
 						break;
 					}
 				}
+				point = point/2;
+				
+//				if(size>1) {
+//						if(point < 1) {
+//							point  = 1;
+//						}
+//						for(int i=0;i<point;i++) {
+//							
+//							if(check1 == 0) {
+//								if(currentNode.getChildNode()==null) {
+//									LinkedNode tempNode = new LinkedNode(item,currentNode,3,null);
+//									currentNode.setChildNode(tempNode);
+//									size++;
+//									inserted = true;
+//									break;
+//								}
+//								currentNode = currentNode.getChildNode();
+//							}
+//							else {
+//								
+//								if(currentNode.getParentNode()==null) {
+//									LinkedNode tempNode = new LinkedNode(item,null,3,currentNode);
+//									currentNode.setParentNode(tempNode);
+//									head = tempNode;
+//									size++;
+//									inserted = true;
+//									break;
+//								}
+//								currentNode = currentNode.getParentNode();
+//							}
+//							
+//						}
+//						if((currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0)&&(currentNode.getChildNode().getElement().toString().compareToIgnoreCase(item.toString()) < 0)) {
+//							
+//							point = point/2;
+//							check1 = 0;
+//							
+//						}
+//						else if((currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0)&&((currentNode.getChildNode().getElement().toString().compareToIgnoreCase(item.toString()) > 0)
+//								||(currentNode.getChildNode()==null))) {
+//							
+//							LinkedNode tempNode = new LinkedNode(item, currentNode, 3, currentNode.getChildNode());
+//							currentNode.getChildNode().setParentNode(tempNode);
+//							currentNode.setChildNode(tempNode);
+//							currentNode = head;
+//							inserted = true;
+//							size++;
+//							break;
+//						}
+//						else if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) == 0) {
+//							
+//							currentNode.aumentCounter();
+//							inserted = true;
+//							break;
+//						}
+//						else {
+//							
+//							point = point/2;
+//							check1 = 1;
+//						}
+//					
+//					
+//				}
+//				else {
+//					if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0) {
+//						
+//						LinkedNode tempNode = new LinkedNode(item,currentNode,3,null);
+//						currentNode.setChildNode(tempNode);
+//						inserted = true;
+//						size++;
+//						currentNode = head;
+//						break;
+//					}
+//					
+//					else {
+//						
+//						LinkedNode tempNode = new LinkedNode(item,null,3,currentNode);
+//						currentNode.setParentNode(tempNode);
+//						inserted = true;
+//						size++;
+//						currentNode = head;
+//						break;
+//					}
+//				}
 			}
 				
 			
@@ -125,16 +250,75 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 	public int search(T item) {
 		
 		int count = 0;
+//		currentNode = head;
+//		for(int i=0;i<size;i++) {
+//			
+//			if(currentNode.getElement().equals(item)) {
+//				
+//				count = currentNode.getECounter();
+//				currentNode = head;
+//				break;
+//			}
+//			currentNode = currentNode.getChildNode();
+//			
+//		}
+		
+		
+		boolean found = false;
+		int point = size/2;
 		currentNode = head;
-		for(int i=0;i<size;i++) {
+		int check = 0;
+		while(!found) {
 			
-			if(currentNode.getElement().equals(item)) {
-				
+			if(point == 0 && (currentNode.getChildNode() == null || currentNode.getParentNode() == null)) {
+				if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) == 0) {
+					count = currentNode.getECounter();
+					found = true;
+					break;
+				}
+				else {
+					count = 0;
+					found = true;
+					break;
+				}
+			}
+			point = 1;
+			if(check == 0) {
+				for(int i=0;i<point;i++) {
+					currentNode = currentNode.getChildNode();
+				}
+			}
+			else {
+				for(int i=0;i<point;i++) {
+					currentNode = currentNode.getParentNode();
+				}
+			}
+			if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) < 0) { //item greater than CE(current element)
+				if(currentNode.getChildNode() == null 
+						|| currentNode.getChildNode().getElement().toString().compareToIgnoreCase(item.toString()) > 0) {//item smaller than CE child
+					count = 0;
+					found = true;
+					break;
+				}
+				check = 0;
+				point = point/2;
+			}
+			else if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) > 0) { //item smaller than CE
+				if(currentNode.getParentNode() == null 
+						|| currentNode.getParentNode().getElement().toString().compareToIgnoreCase(item.toString()) < 0) {//item larger than CE parent
+					count = 0;
+					found = true;
+					break;
+				}
+				check = 1;
+				point = point/2;
+			}
+			else if(currentNode.getElement().toString().compareToIgnoreCase(item.toString()) == 0) { //item equals CE
 				count = currentNode.getECounter();
-				currentNode = head;
+				found = true;
 				break;
 			}
-			currentNode = currentNode.getChildNode();
+			
 			
 		}
 		
