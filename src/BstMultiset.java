@@ -204,7 +204,7 @@ public class BstMultiset<T> extends Multiset<T>
 				
 			}
 			catch(NullPointerException npe) {
-				System.out.println("No such element");
+				
 				
 				found = true;
 				break;
@@ -316,7 +316,7 @@ public class BstMultiset<T> extends Multiset<T>
 				
 			}
 			catch(NullPointerException npe) {
-				System.out.println("No such element");
+				
 				
 				found = true;
 				break;
@@ -340,7 +340,7 @@ public class BstMultiset<T> extends Multiset<T>
 		
 		while(!printed) {
 			
-			if(currentNode.equals(head)) {
+			if(currentNode.equals(head) && checkedLeft == true) {
 				
 				checkedRight = false;
 			}
@@ -392,7 +392,8 @@ public class BstMultiset<T> extends Multiset<T>
 				
 				
 			}
-			if(i == size) {
+			
+			if(i >= size) {
 				
 				printed = true;
 				break;

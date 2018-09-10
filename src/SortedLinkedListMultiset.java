@@ -242,7 +242,7 @@ public class SortedLinkedListMultiset<T> extends Multiset<T>
 
 			
 		}
-		System.out.println("size: " + size);
+		
 
 	} // end of add()
 	
